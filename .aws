@@ -7,6 +7,13 @@ alias aws_get_public_url='aws ec2 describe-instances --query "Reservations[*].In
 
 function aws_ssh() {
 	URL=$( aws_get_public_url )
-	cmd="ssh -i $AWS_PEM_FILE ec2-user@$URL"
-	eval $cmd
+	if [ -z "$URL" ]
+	then 
+		echo "There are no ec2 instnaces running at this time."
+	else
+		USER='carnd'
+		cmd="ssh -v -i $AWS_PEM_FILE $USER@$URL"
+		echo $cmd
+		eval $cmd
+	fi
 }

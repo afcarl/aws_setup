@@ -22,6 +22,8 @@ AWS_SSH_PORT=22
 BROWSER_PATH="/Applications/Google Chrome.app"
 # Path to .pem file
 AWS_PEM_PATH="~/.aws/admin-key-pair-us-east-1b.pem"
+# ec2 user. Based on ami.
+USER="carnd"
 
 echo "Starting..."
 
@@ -65,5 +67,5 @@ echo " Ready."
 ssh-keyscan -H $AWS_IP >> ~/.ssh/known_hosts
 
 # Connect to the AWS instance.
-ssh -i $AWS_PEM_PATH ec2-user@$AWS_IP
+ssh -i $AWS_PEM_PATH $USER@$AWS_IP
 

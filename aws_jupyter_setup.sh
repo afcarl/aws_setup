@@ -6,11 +6,12 @@ source ./aws_private
 CERTIFICATE_DIR="~/certificate"
 JUPYTER_CONFIG_DIR="~/.jupyter-test"
 DEFAULT_PORT="8888"
+USER="carnd"
 
 if [ ! -d "$CERTIFICATE_DIR" ]; then
     mkdir $CERTIFICATE_DIR
     openssl req -x509 -nodes -days 365 -newkey rsa:1024 -keyout "$CERTIFICATE_DIR/mykey.key" -out "$CERTIFICATE_DIR/mycert.pem" -batch
-    chown -R ec2-user $CERTIFICATE_DIR
+    chown -R $USER $CERTIFICATE_DIR
 fi
 
 if [ ! -f "$JUPYTER_CONFIG_DIR/jupyter_notebook_config.py" ]; then
@@ -30,6 +31,6 @@ c.NotebookApp.open_browser = False
 # It is a good idea to set a known, fixed port for server access
 c.NotebookApp.port = $DEFAULT_PORT
 EOF
-    chown -R ec2-user $JUPYTER_CONFIG_DIR
+    chown -R $USER $JUPYTER_CONFIG_DIR
 fi
 
