@@ -10,19 +10,20 @@
 #
 # Script configuration:
 #
-# ID of your AWS instance.
-AWS_INSTANCE_ID="<Your instance ID here>"
+# ID of your AWS instance. This assumes you only have one instance running. 
+AWS_INSTANCE_ID=$(aws ec2 describe-instances --instance-ids $AWS_INSTANCE_ID --query "Reservations[*].Instances[*].InstanceId" --output text)
+# Get the instance state.
+AWS_STATE=$(aws ec2 describe-instances --instance-ids $AWS_INSTANCE_ID --query "Reservations[*].Instances[*].State.Name" --output text)
 # Port that you used in your Jupyter Notebook configuration.
 AWS_NOTEBOOK_PORT=8888
 # Port that you configured in the security group of your AWS instance.
 AWS_SSH_PORT=22
 # Browser path to run Jupyter Notebook.
 BROWSER_PATH="/Applications/Google Chrome.app"
+# Path to .pem file
+AWS_PEM_PATH="~/.aws/admin-key-pair-us-east-1b.pem"
 
 echo "Starting..."
-
-# Get the instance state.
-AWS_STATE=$(aws ec2 describe-instances --instance-ids $AWS_INSTANCE_ID --query "Reservations[*].Instances[*].State.Name" --output text)
 
 if [ "$AWS_STATE" != "stopped" ] && [ "$AWS_STATE" != "running" ]; then
     echo "...Instance is not available, try again later."
@@ -64,5 +65,5 @@ echo " Ready."
 ssh-keyscan -H $AWS_IP >> ~/.ssh/known_hosts
 
 # Connect to the AWS instance.
-ssh -i ~/.aws/my_aws_key.pem ubuntu@$AWS_IP
+ssh -i $AWS_PEM_PATH ec2-user@$AWS_IP
 

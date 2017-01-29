@@ -2,7 +2,8 @@
 
 # Checks current AWS instance state and stops it if it's running.
 
-AWS_INSTANCE_ID="<Your instance ID here>"
+# ID of your AWS instance. This assumes you only have one instance running. 
+AWS_INSTANCE_ID=$(aws ec2 describe-instances --instance-ids $AWS_INSTANCE_ID --query "Reservations[*].Instances[*].InstanceId" --output text)
 
 AWS_STATE=$(aws ec2 describe-instances --instance-ids $AWS_INSTANCE_ID --query "Reservations[*].Instances[*].State.Name" --output text)
 if [ "$AWS_STATE" == "running" ]; then
