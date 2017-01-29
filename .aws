@@ -1,0 +1,12 @@
+#!/bin/bash
+
+export AWS_PEM_FILE='~/.aws/admin-key-pair-us-east-1b.pem'
+
+alias aws_get_ip='aws ec2 describe-instances --query "Reservations[*].Instances[*].PublicIpAddress" --output=text'
+alias aws_get_public_url='aws ec2 describe-instances --query "Reservations[*].Instances[*].PublicDnsName" --output=text'
+
+function aws_ssh() {
+	URL=$( aws_get_public_url )
+	cmd="ssh -i $AWS_PEM_FILE ec2-user@$URL"
+	eval $cmd
+}
