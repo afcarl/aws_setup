@@ -61,7 +61,7 @@ AWS_DNS_NAME=$(aws ec2 describe-instances --instance-ids $AWS_INSTANCE_ID --quer
 echo "AWS instance IP: $AWS_DNS_NAME."
 
 # Launch Chrome with the Jupyter Notebook URL. The URL will fail, since we haven't started it yet.
-NOTEBOOK_URL="http://$AWS_IP:$AWS_NOTEBOOK_PORT/"
+NOTEBOOK_URL="https://$AWS_IP:$AWS_NOTEBOOK_PORT/"
 # SCRIPT_LOGS="https://$AWS_DNS_NAME/var/log/cloud-init-output.log"
 /usr/bin/open -a "$BROWSER_PATH" $NOTEBOOK_URL
 # /usr/bin/open -a "$BROWSER_PATH" $SCRIPT_LOGS

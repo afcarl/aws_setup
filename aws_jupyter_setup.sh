@@ -36,8 +36,8 @@ touch ~/$JUPYTER_CONFIG_DIR/jupyter_notebook_config.py
 # append notebook server settings
 cat <<EOF >> ~/$JUPYTER_CONFIG_DIR/jupyter_notebook_config.py
 # Set options for certfile, ip, password, and toggle off browser auto-opening
-c.NotebookApp.certfile = u'$CERTIFICATE_DIR/mycert.pem'
-c.NotebookApp.keyfile = u'$CERTIFICATE_DIR/mykey.key'
+c.NotebookApp.certfile = u'/home/$USER/$CERTIFICATE_DIR/mycert.pem'
+c.NotebookApp.keyfile = u'/home/$USER/$CERTIFICATE_DIR/mykey.key'
 # Set ip to '*' to bind on all interfaces (ips) for the public server
 c.NotebookApp.ip = '*'
 c.NotebookApp.password = u'$AWS_JUPYTER_HASHED_PWD'
