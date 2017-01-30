@@ -48,7 +48,7 @@ fi
 
 # Wait till the instance has started.
 AWS_STATE="not-ready"
-while "$AWS_STATE" != "running"; do
+while [ "$AWS_STATE" != "running" ]; do
     AWS_STATE=$(aws ec2 describe-instances --instance-ids $AWS_INSTANCE_ID --query "Reservations[*].Instances[*].State.Name" --output text)
     sleep 1; echo -n '.'
 done
