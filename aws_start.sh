@@ -11,7 +11,13 @@
 # Script configuration:
 #
 # ID of your AWS instance. This assumes you only have one instance running. 
-AWS_INSTANCE_ID=$(aws ec2 describe-instances --instance-ids $AWS_INSTANCE_ID --query "Reservations[*].Instances[*].InstanceId" --output text)
+AWS_INSTANCE_ID=$(aws ec2 describe-instances --filters "Name=instance-state-name,Values=pending,running,stopping,stopped" --query "Reservations[*].Instances[*].InstanceId" --output text)
+
+if [ -z AWS_INSTANCE_ID ]; then
+	echo "Unable to find active instance."
+	exit
+fi
+
 # Get the instance state.
 AWS_STATE=$(aws ec2 describe-instances --instance-ids $AWS_INSTANCE_ID --query "Reservations[*].Instances[*].State.Name" --output text)
 # Port that you used in your Jupyter Notebook configuration.
@@ -49,10 +55,14 @@ echo " Ready."
 # Get the instance public IP address.
 AWS_IP=$(aws ec2 describe-instances --instance-ids $AWS_INSTANCE_ID --query "Reservations[*].Instances[*].PublicIpAddress" --output text)
 echo "AWS instance IP: $AWS_IP."
+AWS_DNS_NAME=$(aws ec2 describe-instances --instance-ids $AWS_INSTANCE_ID --query "Reservations[*].Instances[*].PublicDnsName" --output text)
+echo "AWS instance IP: $AWS_DNS_NAME."
 
 # Launch Chrome with the Jupyter Notebook URL. The URL will fail, since we haven't started it yet.
-NOTEBOOK_URL="https://$AWS_IP:$AWS_NOTEBOOK_PORT/"
+NOTEBOOK_URL="http://$AWS_IP:$AWS_NOTEBOOK_PORT/"
+SCRIPT_LOGS="https://$AWS_DNS_NAME/var/log/cloud-init-output.log"
 /usr/bin/open -a "$BROWSER_PATH" $NOTEBOOK_URL
+/usr/bin/open -a "$BROWSER_PATH" $SCRIPT_LOGS
 
 # When the AWS instance starts there is still a bit of a delay till its network interface is initialised, we will wait till it is available.
 echo -n "Waiting for AWS instance network interface..."
