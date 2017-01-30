@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# script to run once instance is started. Unfortunetly this
+# can't be passed in to the ami on startup. 
+
 pip install awscli
 
 cd ~

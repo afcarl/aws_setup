@@ -1,0 +1,7 @@
+#!/bin/bash
+
+AWS_JUPYTER_HASHED_PWD='sha1:sha_hash:hashed_password'
+AMI="ami-00001"
+KEY_NAME="my-pem-key-name"
+SECURITY_GROUP="sg-000001"
+SNAPSHOT="snap-0000001"

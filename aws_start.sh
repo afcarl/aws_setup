@@ -47,7 +47,9 @@ elif [ "$AWS_STATE" == "stopped" ]; then
 fi
 
 # Wait till the instance has started.
-while AWS_STATE=$(aws ec2 describe-instances --instance-ids $AWS_INSTANCE_ID --query "Reservations[*].Instances[*].State.Name" --output text); test "$AWS_STATE" != "running"; do
+AWS_STATE="not-ready"
+while "$AWS_STATE" != "running"; do
+    AWS_STATE=$(aws ec2 describe-instances --instance-ids $AWS_INSTANCE_ID --query "Reservations[*].Instances[*].State.Name" --output text)
     sleep 1; echo -n '.'
 done
 echo " Ready."
@@ -60,13 +62,13 @@ echo "AWS instance IP: $AWS_DNS_NAME."
 
 # Launch Chrome with the Jupyter Notebook URL. The URL will fail, since we haven't started it yet.
 NOTEBOOK_URL="http://$AWS_IP:$AWS_NOTEBOOK_PORT/"
-SCRIPT_LOGS="https://$AWS_DNS_NAME/var/log/cloud-init-output.log"
+# SCRIPT_LOGS="https://$AWS_DNS_NAME/var/log/cloud-init-output.log"
 /usr/bin/open -a "$BROWSER_PATH" $NOTEBOOK_URL
-/usr/bin/open -a "$BROWSER_PATH" $SCRIPT_LOGS
+# /usr/bin/open -a "$BROWSER_PATH" $SCRIPT_LOGS
 
 # When the AWS instance starts there is still a bit of a delay till its network interface is initialised, we will wait till it is available.
 echo -n "Waiting for AWS instance network interface..."
-nc -z -w 5 $AWS_IP $AWS_SSH_PORT 1>/dev/null 2>&1
+nc -z -w 5 $AWS_DNS_NAME $AWS_SSH_PORT 1>/dev/null 2>&1
 while [ $? != 0 ]; do 
     sleep 1; echo -n '.'
     nc -z -w 5 $AWS_IP $AWS_SSH_PORT 1>/dev/null 2>&1
