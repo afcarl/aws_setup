@@ -4,7 +4,9 @@ pip install awscli
 
 SCRIPT_DIR="aws_script_setup"
 
-if [ ! -d "~/$SCRIPT_DIR" ]; then
+if [ -d "~/$SCRIPT_DIR" ]; then
+	echo "$SCRIPT_DIR already exists!"
+else
 	cd ~
     mkdir $SCRIPT_DIR
 fi
