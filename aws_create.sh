@@ -50,13 +50,13 @@ source aws_private
 TERMINATION="--enable-api-termination"
 ROLE="Name=data_ec2"
 BLOCK_MAPPINGS="DeviceName=/dev/sda1,Ebs={SnapshotId=$SNAPSHOT,VolumeSize=$SIZE}"
-USER_DATA= "" # :( ami won't take this file. "file://aws_ec2_startup_script.sh"
+USER_DATA="" ## :( ami won't take this file. "file://aws_ec2_startup_script.sh" --user-data $USER_DATA
 
 INSTANCE_ID=$( aws ec2 describe-instances --filters "Name=image-id,Values=$AMI" "Name=instance-state-name,Values=pending,running,stopping,stopped" --query "Reservations[*].Instances[*].InstanceId" --output text )
 
 if [ -z $INSTANCE_ID ]; then 
 	echo "Starting your ec2 instance."
-	start_cmd="aws ec2 run-instances --image-id $AMI --instance-type $INSTANCE_TYPE --key-name $KEY_NAME --security-group-ids $SECURITY_GROUP --iam-instance-profile $ROLE --block-device-mappings $BLOCK_MAPPINGS --user-data $USER_DATA $TERMINATION $DRY_RUN"
+	start_cmd="aws ec2 run-instances --image-id $AMI --instance-type $INSTANCE_TYPE --key-name $KEY_NAME --security-group-ids $SECURITY_GROUP --iam-instance-profile $ROLE --block-device-mappings $BLOCK_MAPPINGS $TERMINATION $DRY_RUN"
 	echo "Running: $start_cmd"
 	$start_cmd
 
