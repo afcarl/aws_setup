@@ -13,7 +13,6 @@ chmod a+x aws_jupyter_setup.sh
 
 ./aws_jupyter_setup.sh
 
-## TODO add download of anaconda env.
 aws s3 cp s3://kd-carnd/environment-carnd.yml ./ --region us-east-2
 
 conda env create -f environment-carnd.yml
