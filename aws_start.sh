@@ -56,9 +56,9 @@ echo " Ready."
 
 # Get the instance public IP address.
 AWS_IP=$(aws ec2 describe-instances --instance-ids $AWS_INSTANCE_ID --query "Reservations[*].Instances[*].PublicIpAddress" --output text)
-echo "AWS instance IP: $AWS_IP."
+echo "AWS instance IP: $AWS_IP"
 AWS_DNS_NAME=$(aws ec2 describe-instances --instance-ids $AWS_INSTANCE_ID --query "Reservations[*].Instances[*].PublicDnsName" --output text)
-echo "AWS instance IP: $AWS_DNS_NAME."
+echo "AWS dns name: $AWS_DNS_NAME"
 
 # Launch Chrome with the Jupyter Notebook URL. The URL will fail, since we haven't started it yet.
 NOTEBOOK_URL="https://$AWS_IP:$AWS_NOTEBOOK_PORT/"
