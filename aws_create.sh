@@ -71,7 +71,8 @@ if [ -z $INSTANCE_ID ]; then
     	sleep 1; echo -n '.'
 	done
 
-	echo "Instance id: $INSTANCE_ID"
+	echo "Got instance id: $INSTANCE_ID"
+	echo "Waiting for instance to start up."
 
 	AWS_STATE="not-running"
 	while [ "$AWS_STATE" != "running" ]; do
