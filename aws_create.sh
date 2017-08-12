@@ -52,7 +52,7 @@ ROLE="Name=data_ec2"
 BLOCK_MAPPINGS="DeviceName=/dev/sda1,Ebs={SnapshotId=$SNAPSHOT,VolumeSize=$SIZE}"
 USER_DATA="" ## :( ami won't take this file. "file://aws_ec2_startup_script.sh" --user-data $USER_DATA
 
-INSTANCE_ID=$( aws ec2 describe-instances --filters "Name=image-id,Values=$AMI" "Name=instance-state-name,Values=pending,running,stopping,stopped" --query "Reservations[*].Instances[*].InstanceId" --output text )
+INSTANCE_ID=$( aws ec2 describe-instances --filters "Name=instance-type,Values=$INSTANCE_TYPE" "Name=image-id,Values=$AMI" "Name=instance-state-name,Values=pending,running,stopping,stopped" --query "Reservations[*].Instances[*].InstanceId" --output text )
 
 if [ -z $INSTANCE_ID ]; then 
 	echo "Starting your ec2 instance."
